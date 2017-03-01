@@ -1,1 +1,22 @@
+###
+#
+# Cade Brown's projectfiles
+#
+# Gitignore
+#
+###
+
+
+# All tmp blend files
 *.blend[0-9]+
+
+# output formats
+*.png
+*.jpg
+*.jpeg
+*.tiff
+*.tga
+*.avi
+*.bmp
+*.mov
+*.mp4
