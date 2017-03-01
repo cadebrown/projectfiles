@@ -8,7 +8,7 @@
 
 
 # All tmp blend files
-*.blend[0-9]+
+*.blend?
 
 # output formats
 *.png
