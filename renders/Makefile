@@ -31,4 +31,4 @@ targets=$(subst .blend,,$(wildcard *.blend))
 default: $(targets)
 
 $(dir)%: $(dir)%.blend
-	$(blender) -b $< -o $(out)$@ -P scripts/tiles.py -P scripts/configure.py $(Bframe_flags) $(Bpy_args)
+	$(blender) -b $< -o $(out)$@ -P scripts/configure.py $(Bframe_flags) $(Bpy_args)
