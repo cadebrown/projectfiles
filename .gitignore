@@ -10,6 +10,9 @@
 # All tmp blend files
 *.blend?
 
+# tmp folders
+*.bak
+
 # output formats
 *.png
 *.jpg
