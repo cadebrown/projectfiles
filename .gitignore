@@ -7,6 +7,8 @@
 ###
 
 
+
+.DS_Store
 # All tmp blend files
 *.blend?
 
@@ -23,3 +25,5 @@
 *.bmp
 *.mov
 *.mp4
+
+
