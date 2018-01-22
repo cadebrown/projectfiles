@@ -35,22 +35,21 @@ def scale(x, n=1.776):
     sg = -1 if x < 0 else +1
     return sg * abs(x) ** (1.0 / n)
 
-prefix = "chaudiovis"
-
+prefix = "chaudiovisfreq"
 
 
 fps = 24
 
 depth = .01
-girth = .2
+girth = .25
 channel_gap = .25
 
-bars = 240
+bars = 2048
 channels = audio_file.channels
 frames = int((audio_file.seconds + bars * depth) * fps) + 1
 
-#if frames > fps * 10:
-#    frames = fps * 10
+if frames > fps * 10:
+    frames = fps * 10
 
 bpy.ops.object.select_all(action='DESELECT')
 
@@ -93,9 +92,9 @@ for i in range(0, bars):
         cube_group.objects.link(ob)
 
 
-samples_per_frameblock = audio_file.hz / fps
+#samples_per_frameblock = audio_file.hz / fps
 #super_sample = int(audio_file.hz * depth)
-super_sample = 1
+#super_sample = 5
 
 ctx.scene.frame_start = 0
 ctx.scene.frame_end = frames
@@ -104,24 +103,17 @@ anim_what = 'scale'
 
 print ("calculating points and keyframing...")
 
+num_samples = 2 * bars
 
 for j in range(0, channels):
-    for k in range(0, len(objs[j])):
-        o = objs[j][k]
-        for i in range(0, frames):
+    for i in range(0, frames):
+        samp_idx = int(audio_file.hz * float(i) / fps + .5)
+        fft_frame = np.fft.rfft(audio_file[j][samp_idx:samp_idx + num_samples])[1:]
+        mags = np.abs(fft_frame)
+        for k in range(0, len(objs[j])):
+            o = objs[j][k]
             
-            samp_idx = int(i * samples_per_frameblock + k * depth * audio_file.hz - depth * bars * audio_file.hz)
-            if samp_idx < 0:
-                samps = [0]
-            else:
-                samps = audio_file[j][samp_idx:samp_idx + super_sample]
-            
-            loca = float(k) / (len(objs[j]) - 1)
-            
-            samp = np.median(samps)
-            
-            #o.scale[1] *= .75 + loca / 4
-            o.scale[2] = scale(samp * (.3 + .7 * loca))
+            o.scale[2] = mags[k] #scale(np.median(samps))
             o.keyframe_insert(data_path=anim_what, frame=i)
 
 print ("done")
